@@ -13,9 +13,9 @@ app = Flask(__name__)
 
 model = ResNet18Model()
 model_file_name = 'floorplan_resnet18.pth'
-google_drive_id = '1NZ-r8lcEAvo8ThCbjSnVfqUVNJ6tmuy0'
-if not os.path.exists('floorplan_resnet18.pth'):
-    subprocess.Popen(['scripts/dl-gdrive', google_drive_id , model_file_name])
+# google_drive_id = '1NZ-r8lcEAvo8ThCbjSnVfqUVNJ6tmuy0'
+# if not os.path.exists('floorplan_resnet18.pth'):
+#     subprocess.Popen(['scripts/dl-gdrive', google_drive_id , model_file_name])
 
 if torch.cuda.is_available():
     trained_weights = torch.load(model_file_name)
