@@ -5,3 +5,4 @@ Flask==1.1.2
 Werkzeug==1.0.1
 albumentations==0.4.5
 gdown==3.10.3
+gevent==1.5.0
