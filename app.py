@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from ml.model import ResNet18Model
-import subprocess
+import gdown
 import torch
 import os
 from werkzeug.utils import secure_filename
@@ -13,7 +13,8 @@ app = Flask(__name__)
 
 model = ResNet18Model()
 model_file_name = 'floorplan_resnet18.pth'
-# google_drive_id = '1NZ-r8lcEAvo8ThCbjSnVfqUVNJ6tmuy0'
+google_drive_id = '1NZ-r8lcEAvo8ThCbjSnVfqUVNJ6tmuy0'
+gdown.download(f'https://drive.google.com/uc?id={google_drive_id}', model_file_name)
 # if not os.path.exists('floorplan_resnet18.pth'):
 #     subprocess.Popen(['scripts/dl-gdrive', google_drive_id , model_file_name])
 
