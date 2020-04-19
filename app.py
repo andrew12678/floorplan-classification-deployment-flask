@@ -9,6 +9,7 @@ from albumentations import (
     Compose, LongestMaxSize, PadIfNeeded
 )
 import numpy as np
+from gevent.pywsgi import WSGIServer
 app = Flask(__name__)
 
 model = ResNet18Model()
@@ -68,4 +69,10 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.debug = True
+    port = int(os.environ.get('PORT', 5000))
+    print("\n########################################")
+    print('--- Running on port {} ---'.format(port))
+    print("########################################\n")
+    http_server = WSGIServer(('', port), app)
+    http_server.serve_forever()
