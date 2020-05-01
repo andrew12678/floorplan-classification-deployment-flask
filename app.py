@@ -38,12 +38,13 @@ def process_image(img_path):
 
 def get_prediction(img_path):
     list_img = [process_image(img_path)]
-    data = np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32)
-
-    ort_inputs = {ort_session.get_inputs()[0].name: data}
-    ort_outs = ort_session.run(None, ort_inputs)
-    prediction = np.argmax(ort_outs).item()
-    return CLASSES[prediction]
+    pass
+    # data = np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32)
+    #
+    # ort_inputs = {ort_session.get_inputs()[0].name: data}
+    # ort_outs = ort_session.run(None, ort_inputs)
+    # prediction = np.argmax(ort_outs).item()
+    # return CLASSES[prediction]
 
 
 @app.route('/')
