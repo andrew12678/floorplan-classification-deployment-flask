@@ -1,6 +1,6 @@
 numpy==1.18.2
 Flask==1.1.2
+opencv-python-headless>=4.1.1
 Werkzeug==1.0.1
-albumentations==0.4.5
 onnxruntime==1.2.0
 gevent==1.5.0

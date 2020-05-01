@@ -2,9 +2,12 @@ from flask import Flask, render_template, request
 import os
 from werkzeug.utils import secure_filename
 import cv2
-from albumentations import (
-    Compose, LongestMaxSize, PadIfNeeded
-)
+# from albumentations import (
+#     Compose, LongestMaxSize, PadIfNeeded
+# )
+
+from albumentations_min import PadIfNeeded, LongestMaxSide
+
 import numpy as np
 from gevent.pywsgi import WSGIServer
 import onnxruntime
@@ -16,17 +19,18 @@ CLASSES = ["a Floorplan", "not a Floorplan"]
 def process_image(img_path):
     img_color = cv2.imread(img_path)
     img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
-    augmentation = Compose([
-        LongestMaxSize(max_size=224),
-        PadIfNeeded(
-            min_height=224,
-            min_width=224,
-            border_mode=0)
-    ])
-    augmented = augmentation(**{
-        'image': img_color
-    })
-    return augmented["image"]
+    return PadIfNeeded(LongestMaxSide(img_color, 224))
+    # augmentation = Compose([
+    #     LongestMaxSide(max_size=224),
+    #     PadIfNeeded(
+    #         min_height=224,
+    #         min_width=224,
+    #         border_mode=0)
+    # ])
+    # augmented = augmentation(**{
+    #     'image': img_color
+    # })
+    # return augmented["image"]
 
 def get_prediction(img_path):
     list_img = [process_image(img_path)]
