@@ -17,6 +17,7 @@ ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/resnet18.onnx'))
 CLASSES = ["a Floorplan", "not a Floorplan"]
 
 def process_image(img_path):
+    print(img_path)
     img_color = cv2.imread(img_path)
     print(img_color)
     img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
