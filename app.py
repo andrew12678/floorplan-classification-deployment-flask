@@ -1,7 +1,4 @@
 from flask import Flask, render_template, request
-from ml.model import ResNet18Model
-import gdown
-import torch
 import os
 from werkzeug.utils import secure_filename
 import cv2
@@ -10,23 +7,10 @@ from albumentations import (
 )
 import numpy as np
 from gevent.pywsgi import WSGIServer
+import onnxruntime
 app = Flask(__name__)
 
-model = ResNet18Model()
-model_file_name = 'floorplan_resnet18.pth'
-google_drive_id = '1NZ-r8lcEAvo8ThCbjSnVfqUVNJ6tmuy0'
-gdown.download(f'https://drive.google.com/uc?id={google_drive_id}', model_file_name)
-# if not os.path.exists('floorplan_resnet18.pth'):
-#     subprocess.Popen(['scripts/dl-gdrive', google_drive_id , model_file_name])
-
-if torch.cuda.is_available():
-    trained_weights = torch.load(model_file_name)
-else:
-    trained_weights = torch.load(model_file_name, map_location='cpu')
-
-model.load_state_dict(trained_weights['state_dict'])
-model.eval()
-
+ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/resnet18.onnx'))
 CLASSES = ["a Floorplan", "not a Floorplan"]
 
 def process_image(img_path):
@@ -46,9 +30,11 @@ def process_image(img_path):
 
 def get_prediction(img_path):
     list_img = [process_image(img_path)]
-    data = torch.from_numpy(np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32))
-    output = model(data)
-    prediction = torch.argmax(output).item()
+    data = np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32)
+
+    ort_inputs = {ort_session.get_inputs()[0].name: data}
+    ort_outs = ort_session.run(None, ort_inputs)
+    prediction = np.argmax(ort_outs).item()
     return CLASSES[prediction]
 
 
