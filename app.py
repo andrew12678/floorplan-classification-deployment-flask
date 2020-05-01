@@ -17,13 +17,9 @@ ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/resnet18.onnx'))
 CLASSES = ["a Floorplan", "not a Floorplan"]
 
 def process_image(img_path):
-    print(img_path)
-    pass
-    # img_color = cv2.imread(img_path)
-    # print(img_color)
-    # img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
-    # print(img_color)
-    # return PadIfNeeded(LongestMaxSide(img_color, 224))
+    img_color = cv2.imread(img_path)
+    img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
+    return PadIfNeeded(LongestMaxSide(img_color, 224))
     # augmentation = Compose([
     #     LongestMaxSide(max_size=224),
     #     PadIfNeeded(
@@ -38,13 +34,12 @@ def process_image(img_path):
 
 def get_prediction(img_path):
     list_img = [process_image(img_path)]
-    pass
-    # data = np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32)
-    #
-    # ort_inputs = {ort_session.get_inputs()[0].name: data}
-    # ort_outs = ort_session.run(None, ort_inputs)
-    # prediction = np.argmax(ort_outs).item()
-    # return CLASSES[prediction]
+    data = np.array(list_img)[:, :, :, :].transpose(0, 3, 1, 2).astype(np.float32)
+
+    ort_inputs = {ort_session.get_inputs()[0].name: data}
+    ort_outs = ort_session.run(None, ort_inputs)
+    prediction = np.argmax(ort_outs).item()
+    return CLASSES[prediction]
 
 
 @app.route('/')
