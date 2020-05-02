@@ -13,7 +13,8 @@ from gevent.pywsgi import WSGIServer
 import onnxruntime
 app = Flask(__name__)
 
-ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/resnet18.onnx'))
+#ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/resnet18.onnx'))
+ort_session = onnxruntime.InferenceSession(os.path.abspath('ml/efficientnet_b0.onnx'))
 CLASSES = ["a Floorplan", "not a Floorplan"]
 
 def process_image(img_path):
